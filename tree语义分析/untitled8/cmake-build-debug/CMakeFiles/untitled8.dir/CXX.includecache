@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/opt/Cpro/untitled8/Mytree.h
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+string
+-
+vector
+-
+iostream
+-
+time.h
+-
+
+/opt/Cpro/untitled8/tree.cpp
+Mytree.h
+/opt/Cpro/untitled8/Mytree.h
+
