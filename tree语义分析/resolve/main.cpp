@@ -1,0 +1,65 @@
+#include "Myall.h"
+#include "database_engine.h"
+int main() {
+//
+
+
+
+//
+use_fun();
+char *str = "select * from aaa where age > 5 and id = 4 or xxx = 6";
+sqlsacnner(str);
+get_wordlen();
+create_sqltree();
+treenode *root =check_tree();//词组中第一个word匹配
+sql_sel(root);
+
+char a[4];
+char *sre = "aaa";
+strcat(a,sre);
+cout<<a;
+
+
+
+
+
+
+
+//sqlitWord wordbbbbbbbb11 = get_word(1);
+
+//char arr[50] = "asfsfgd";
+//char arr1[50] = "xxx";
+//std::size_t arrs =  strlen(arr1)+strlen(arr)+1;
+//char strs[arrs];
+//memset(strs,0,arrs);
+//strcat(strs,arr);
+//strcat(strs,arr1);
+//strs[strlen(arr1)+strlen(arr)] = '\0';
+//char *stras = (char *)malloc(sizeof(strlen(arr1)+strlen(arr)+1));
+//memcpy(stras,strs,strlen(arr1)+strlen(arr)+1);
+
+//test();
+
+
+
+//treenode *root = (treenode *)malloc(sizeof(treenode));
+//root->str = "aaa";
+//
+//    treenode *root2 = (treenode *)malloc(sizeof(treenode));
+//    root2->str = "bbb";
+//
+//    treenode *root3 = (treenode *)malloc(sizeof(treenode));
+//    root3->str = "ccc";
+//list *p = (list *)malloc(sizeof(list));
+//add_list(p,root);
+//add_list(p,root2);
+//add_list(p,root3);
+//dis_play(p);
+//treenode *port = get_list_node(p,1);
+//log_info(port->str);
+//p = remove_node(p,1);
+//port = get_list_node(p,1);
+//log_info(port->str);
+
+    return 0;
+}
