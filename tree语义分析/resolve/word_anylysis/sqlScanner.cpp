@@ -336,6 +336,12 @@ int isNumber() {
         return 0;
 }
 
+
+
+
+
+
+
 int sList() {
     int i = 1;
     //TODO
@@ -706,9 +712,16 @@ colnm *get_colnm(){
 
 colnm *get_andcolum(int len){
     int end = len;
-    for(int i = len;i < nowlen;i++){
+    if(len+3 > nowlen){
+        colnm *c = (colnm *)malloc(sizeof(colnm));
+        c->type = -235;
+        return c;
+    }
+    for(int i = len;i < len+3;i++){
         if(word[i].num == 10||word[i].num == 11){
-            break;
+            colnm *c = (colnm *)malloc(sizeof(colnm));
+            c->type = -234;
+            return c;
         } else{
             end++;
         }
@@ -736,14 +749,64 @@ colnm *get_andcolum(int len){
     p->start = 1;
     return p;
 
-
-
-
-
-
-
 }
 
+
+list * branch_245(int arrlen){
+    list *res = (list *)malloc(sizeof(list));
+    memset(res,0,sizeof(list));
+    treenode *trees[3];
+    memset(trees,0,sizeof(trees));
+    sqlitWord *w = word;
+    w = w+arrlen;
+    for (int i = 0; i < 3; i++) {
+        trees[i] = (treenode *)malloc(sizeof(treenode));
+        trees[i]->str = (char *)malloc(strlen(w->arr)+1);
+        memset(trees[i]->str,0,strlen(w->arr)+1);
+        for(int j = 0;j < strlen(w->arr);j++){
+            char c = w->arr[j];
+            trees[i]->str[j] = c;
+        }
+        trees[i]->str += '\0';
+        trees[i]->strlen = strlen(trees[i]->str);
+        trees[i]->strtype = w->num;
+        w++;
+            arrlen++;
+    }
+
+    for(int i = 0;i < 3;i++){
+        add_list(res,trees[i]);
+    }
+    return res;
+
+}
+list * branch_256(int arrlen,int num){
+    list *res = (list *)malloc(sizeof(list));
+    memset(res,0,sizeof(list));
+    treenode *trees[num];
+    memset(trees,0,sizeof(trees));
+    sqlitWord *w = word;
+    w = w+arrlen;
+    char *set;
+    for (int i = 0; i < num; i++) {
+        trees[i] = (treenode *)malloc(sizeof(treenode));
+        trees[i]->str = (char *)malloc(strlen(w->arr)+1);
+        memset(trees[i]->str,0,strlen(w->arr)+1);
+        for(int j = 0;j < strlen(w->arr);j++){
+            char c = w->arr[j];
+            trees[i]->str[j] = c;
+        }
+        trees[i]->str += '\0';
+        trees[i]->strlen = strlen(trees[i]->str);
+        trees[i]->strtype = w->num;
+        w+=2;
+    }
+
+    for(int i = 0;i < num;i++){
+        add_list(res,trees[i]);
+    }
+    return res;
+}
 
 
 

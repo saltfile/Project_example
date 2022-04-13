@@ -5,6 +5,7 @@
 
 void add_list(list *root,treenode *node){
     list *p = root;
+
     if(p->tree == NULL){
         p->tree = node;
         return;
@@ -116,7 +117,16 @@ list *remove_node(list *root,int len){
     }
 }
 
-
+//字符串复制
+char * str_copy(char *str,char *arr){
+    str = (char *)malloc(strlen(arr)+1);
+    memset(str,0,strlen(arr)+1);
+    for(int i = 0;i < strlen(arr);i++){
+        str[i] = arr[i];
+    }
+    str += '\0';
+    return str;
+}
 
 
 

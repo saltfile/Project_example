@@ -35,7 +35,6 @@ void log_erro(char *data){
 }
 
 
-
 void log_debug(char *data){
     string str = data;
     string out = "\033[35mLOG-DEBUG:------->\033[0m";

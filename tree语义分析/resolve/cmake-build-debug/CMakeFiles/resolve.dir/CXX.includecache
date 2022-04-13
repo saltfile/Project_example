@@ -30,6 +30,10 @@ global_c.h
 ../Myall.h
 /opt/Cpro/resolve/Myall.h
 
+/opt/Cpro/resolve/gammer_tree/list_fun.cpp
+../Myall.h
+/opt/Cpro/resolve/Myall.h
+
 /opt/Cpro/resolve/global_c.h
 stdio.h
 -
@@ -106,9 +110,17 @@ pwd.h
 database_engine.h
 /opt/Cpro/resolve/database_engine.h
 
+/opt/Cpro/resolve/log/log_fun.cpp
+../Myall.h
+/opt/Cpro/resolve/Myall.h
+
 /opt/Cpro/resolve/main.cpp
 Myall.h
 /opt/Cpro/resolve/Myall.h
 database_engine.h
 /opt/Cpro/resolve/database_engine.h
+
+/opt/Cpro/resolve/word_anylysis/sqlScanner.cpp
+../Myall.h
+/opt/Cpro/resolve/Myall.h
 

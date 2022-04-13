@@ -8,10 +8,13 @@ struct treenode *sel_tree[TREE_LEN];
 struct treenode *ins_tree[TREE_LEN];
 //被取走的树节点
 int sql_len = 0;
+int in_len = 0;
 
 int wordlen = 0;
 
 void create_sqltree(){
+    memset(sel_tree,0,sizeof(treenode)*TREE_LEN);
+    memset(ins_tree,0,sizeof(treenode)*TREE_LEN);
     for(int i = 0 ;i < TREE_LEN;i++){
         //node1是select//节点type是1
         treenode *node1 = (treenode *)malloc(sizeof(treenode));
@@ -46,6 +49,37 @@ void create_sqltree(){
         sel_tree[i] = node1;
     }
     sql_len = TREE_LEN-1;
+    for(int i = 0 ;i < TREE_LEN;i++){
+
+        treenode *node1 = (treenode *)malloc(sizeof(treenode));
+        memset(node1,0,sizeof(node1));
+        node1->strtype = 2;
+        node1->str = "insert";
+        node1->strlen = strlen(node1->str);
+        treenode *node2 = (treenode *)malloc(sizeof(treenode));
+        memset(node2,0,sizeof(node2));
+        node2->strtype = 5;
+        node2->str = "into";
+        node2->strlen = strlen(node2->str);
+        node1->nodelist = (list *)malloc(sizeof(list));
+        add_list(node1->nodelist,node2);
+        treenode *node3 = (treenode *)malloc(sizeof(treenode));
+        memset(node3,0,sizeof(node3));
+        node3->strtype = 100;
+        node3->str = "t_name";
+        node3->strlen = strlen(node3->str);
+        node2->nodelist = (list *)malloc(sizeof(list));
+        add_list(node1->nodelist,node3);
+        treenode *node4 = (treenode *)malloc(sizeof(treenode));
+        memset(node4,0,sizeof(node4));
+        node4->strtype = 14;
+        node4->str = "values";
+        node4->strlen = strlen(node4->str);
+        node3->nodelist = (list *)malloc(sizeof(list));
+        add_list(node1->nodelist,node4);
+        ins_tree[i] = node1;
+    }
+    in_len = TREE_LEN-1;
 }
 
 
@@ -60,9 +94,13 @@ treenode *check_tree(){
             root = sel_tree[sql_len];
             sel_tree[sql_len] = NULL;
             sql_len--;
+            sql_sel(root);
             break;
         case 2:
             log_info("插入语句");
+            root = ins_tree[in_len];
+            ins_tree[in_len] = NULL;
+            in_len--;
             break;
         default:
             log_erro("错误，语句存在违规语法");
@@ -85,6 +123,30 @@ void check_fun(treenode *sql){
             break;
     }
 }
+//TODO:这里是处理insert语句简单实例
+//先对比前面四个语法是否正确
+//插入语句树
+void sql_ins(treenode *root){
+    treenode *p = root;
+    list * sel = p->nodelist;
+    treenode *sql = sel->tree;
+    int arrlen = 1;
+    int wordlen = get_wordlen();
+    sqlitWord word = get_word(arrlen);
+    //into
+    if(word.num != sql->strtype){
+
+
+
+
+    }
+
+
+
+}
+
+
+
 //TODO:这里是处理select语句简单实例
 //先对比前面四个语法是否正确
 void sql_sel(treenode *root){
@@ -99,6 +161,8 @@ void sql_sel(treenode *root){
         sql->strtype = s->type;
         sql->str = s->str;
         sql->strlen = strlen(sql->str);
+        int nums =  s->end-arrlen-1;
+        sql->nodelist = branch_256(arrlen,nums);
         arrlen+=s->end;
     }else{
         arrlen += 1;
@@ -133,7 +197,7 @@ void sql_sel(treenode *root){
     word = get_word(arrlen);
     if(word.num == sql->strtype){
         sql->str = (char *)malloc(sizeof(strlen(word.arr)+1));
-        sql->str = word.arr;
+        sql->str = str_copy(sql->str,word.arr);
         sql->strlen = strlen(sql->str);
         sql->str += '\0';
     }
@@ -187,8 +251,34 @@ void sql_sel(treenode *root){
 
     if(and_word.num == 100) {
         while (true){
+            //先形成小链表
         colnm *s = get_andcolum(arrlen);
+        if(s->type == -234){
+            log_erro("语法错误:条件语句不可接受and/or语句");
+            return;
+        } else if(s->type == -235){
+            log_erro("语法错误:条件语句缺少元素");
+            return;
+        }
+        int p_len = arrlen;
         treenode *annode = (treenode *) malloc(sizeof(treenode));
+        annode->nodelist = (struct list*)malloc(sizeof(list));
+        memset(annode->nodelist,0,sizeof(list));
+
+        annode->nodelist = branch_245(arrlen);
+        //这里指针逃逸需要去解决
+
+
+        //生成下面的条件语句链表
+//        for(int i = p_len ; i < arrlen+3;i++){
+//            sqlitWord sql_word = get_word(i);
+//            treenode *prevs = (treenode *)malloc(sizeof(treenode));
+//            prevs->str = sql_word.arr+'\0';
+//            prevs->strlen = strlen(prevs->str);
+//            prevs->strtype = sql_word.num;
+//            add_list(annode->nodelist,prevs);
+//        }
+
         annode->str = s->str;
         annode->strlen = strlen(annode->str);
         annode->strtype = s->type;
@@ -196,6 +286,7 @@ void sql_sel(treenode *root){
         sel = sel->next;
         sql = sel->tree;
         arrlen = s->end;
+
         if (wordlen <= arrlen) {
                 //封装语法错误
                 log_debug("语句结束");
@@ -230,21 +321,54 @@ void sql_sel(treenode *root){
                 return;
             }
         }else{
-            log_erro("语法错误");
+            log_erro("语法错误:条件语句缺少对应的运算符");
             return;
         }
         }
         log_info("语句结束");
+    } else{
+        string str = "语句where后面不可加上: ";
+        string  str1 = and_word.arr;
+        string sss = str+str1;
+        log_erro(sss);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void sel_254(treenode *node){
+    treenode *p = node;
+    char *str = p->str;
+    char *strs[3];
+    char pstr[p->strlen];
+    int p_pstr = 0;
+    int p_strs = 0;
+    for(int i = 0;i < p->strlen;i++){
+        if(str[i] == ' '){
+            strs[p_strs] = pstr;
+            p_pstr = 0;
+            memset(pstr,0,p->strlen);
+            continue;
+        } else{
+            pstr[p_pstr] = str[i];
+            p_pstr++;
+        }
+
     }
 
-}
-
-void fun_254(treenode *root){
-    treenode *p = root;
-
-
-
-
 
 
 
@@ -253,8 +377,6 @@ void fun_254(treenode *root){
 
 
 }
-
-
 
 
 
@@ -264,25 +386,15 @@ void tree_trim(treenode *root){
     while (p->nodelist!=NULL){
         list *list = p->nodelist;
 
-        while (list->next){
+        while (list = list->next){
             treenode *node = list->tree;
             switch (node->strtype) {
-                case 254:break;
-
-
-
+                case 254:{
+                    sel_254(node);
+                }break;
 
             }
-
-
-
-
         }
-
-
-
-
-
 
 
 

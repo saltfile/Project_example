@@ -15,6 +15,7 @@ using namespace std;
 void log_info(string str);
 void log_info(char *data);
 void log_erro(char *data);
+void log_erro(string data);
 void log_debug(char *data);
 
 
@@ -51,7 +52,6 @@ typedef struct treenode{
    struct treenode *prev;//前继
    struct list *nodelist;//节点列表
 }treenode;
-
 //链表函数
 void add_list(list *root,treenode *node);
 void dis_play(list *root);
@@ -63,6 +63,7 @@ treenode *check_tree();//先确定语句类型
 void check_fun(treenode *sql);
 void create_sqltree();
 void sql_sel(treenode *root);
+void sql_ins(treenode *root);
 void test();
 //临时性传参结构体
 typedef  struct colnm{
@@ -75,12 +76,14 @@ typedef  struct colnm{
 colnm *get_colnm();
 colnm *get_andcolum(int len);
 void use_fun();
+//字符串复制
+char *str_copy(char *str,char *arr);
+
+void tree_trim(treenode *root);
 
 
-
-
-
-
+list * branch_245(int arrlen);
+list * branch_256(int arrlen,int num);
 
 
 
