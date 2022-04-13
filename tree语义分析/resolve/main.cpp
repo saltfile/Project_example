@@ -1,23 +1,37 @@
 #include "Myall.h"
 #include "database_engine.h"
+/**
+ * "select id,age,name from aaa where age > 2 and id = 12 or xxx = xs"
+ * "insert into tname  values(id,name,age,sex)"
+ * @return
+ */
+
+
+
+
 int main() {
-//
-
-
-
-//
 use_fun();
-char *str = "select * from aaa where age > 5 and id = 4 or xxx = 6";
+char *sss = "insert into tname  values(id,name,age,sex)";
+char *str =   "select id,age,name from aaa where age > 2 and id = 12 or xxx = xs";
 sqlsacnner(str);
 get_wordlen();
 create_sqltree();
 treenode *root =check_tree();//词组中第一个word匹配
-sql_sel(root);
+sqlsacnner(sss);
+//sql_sel(root);
+//tree_trim(root);
 
-char a[4];
-char *sre = "aaa";
-strcat(a,sre);
-cout<<a;
+
+
+
+
+
+
+//
+//char a[4];
+//char *sre = "aaa";
+//strcat(a,sre);
+//cout<<a;
 
 
 
