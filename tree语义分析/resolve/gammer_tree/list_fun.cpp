@@ -128,5 +128,19 @@ char * str_copy(char *str,char *arr){
     return str;
 }
 
+char * str_merge(char *str,char * merstr){
+    char * res = (char *)malloc(strlen(str)+1+strlen(merstr));
+    memset(res,0,strlen(str)+strlen(merstr));
+    for(int i = 0;i < strlen(str);i++){
+        res[i] = str[i];
+    }
 
+    for(int i = 0;i < strlen(str);i++){
+        res[i] = merstr[i+strlen(str)];
+    }
+    res+='\0';
+    if(str != NULL)
+    free(str);
+    return res;
+}
 

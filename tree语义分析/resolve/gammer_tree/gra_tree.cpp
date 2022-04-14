@@ -70,13 +70,6 @@ void create_sqltree(){
         node3->strlen = strlen(node3->str);
         node2->nodelist = (list *)malloc(sizeof(list));
         add_list(node1->nodelist,node3);
-        treenode *node4 = (treenode *)malloc(sizeof(treenode));
-        memset(node4,0,sizeof(node4));
-        node4->strtype = 14;
-        node4->str = "values";
-        node4->strlen = strlen(node4->str);
-        node3->nodelist = (list *)malloc(sizeof(list));
-        add_list(node1->nodelist,node4);
         ins_tree[i] = node1;
     }
     in_len = TREE_LEN-1;
@@ -101,6 +94,7 @@ treenode *check_tree(){
             root = ins_tree[in_len];
             ins_tree[in_len] = NULL;
             in_len--;
+            sql_ins(root);
             break;
         default:
             log_erro("错误，语句存在违规语法");
@@ -134,15 +128,80 @@ void sql_ins(treenode *root){
     int wordlen = get_wordlen();
     sqlitWord word = get_word(arrlen);
     //into
-    if(word.num != sql->strtype){
+    if(word.num == sql->strtype){
+        sel = sel->next;
+        sql = sel->tree;
+        arrlen++;
+    } else{
+        log_erro("插入语句错误,缺少into");
+    }
+    if(wordlen <= arrlen){
+        //封装语法错误
+        log_erro("语句残缺");
+        return;
+    }
+    //tname
+    word = get_word(arrlen);
+    if(word.num == sql->strtype){
+        sql->str = str_copy(sql->str,word.arr);
+        sql->strlen = strlen(sql->str);
+        sel = sel->next;
+        sql = sel->tree;
+        arrlen++;
+    } else{
+        log_erro("表名位置，缺少后续语句");
+        return;
+    }
 
-
-
-
+    if(wordlen <= arrlen){
+        //封装语法错误
+        log_erro("语句残缺");
+        return;
+    }
+    //列名字表
+    word = get_word(arrlen);
+    char *str=NULL;
+    if(word.num == 40){
+        arrlen++;
+        while (true){
+            if(wordlen <= arrlen){
+                //封装语法错误
+                log_erro("语句残缺");
+                return;
+            }
+            word = get_word(arrlen);
+            if(word.num == 41){
+                break;
+            }
+            str = str_merge(str,word.arr);
+            arrlen++;
+        }
     }
 
 
 
+
+
+
+
+
+    //values
+    word = get_word(arrlen);
+    if(word.num == 14){
+        sel = sel->next;
+        sql = sel->tree;
+        arrlen++;
+    }
+    if(wordlen <= arrlen){
+        //封装语法错误
+        log_erro("语句残缺");
+        return;
+    }
+
+    //()括号内数据
+
+
+    clear_cache();
 }
 
 
@@ -193,7 +252,6 @@ void sql_sel(treenode *root){
     }
     int tablelen = strlen(databasename)+sql->strlen+2;
     char name_tab[tablelen];
-
     word = get_word(arrlen);
     if(word.num == sql->strtype){
         sql->str = (char *)malloc(sizeof(strlen(word.arr)+1));
@@ -332,6 +390,7 @@ void sql_sel(treenode *root){
         string sss = str+str1;
         log_erro(sss);
     }
+    clear_cache();
 }
 
 
