@@ -54,6 +54,7 @@
  * 254 and或or之间的词类似于age>40
  * 255 ()内有另外的select语句
  * 256 数据库查询的列号select age,name,id from中的age,name,id下面分支分出来分别是age name id
+ * 257 ()内有列名
  * 1000 \0
  * */
 
@@ -807,7 +808,13 @@ list * branch_256(int arrlen,int num){
     }
     return res;
 }
+list * branch_257(int arrlen,int num){
 
+
+
+
+
+}
 
 
 

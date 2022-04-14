@@ -78,7 +78,7 @@ colnm *get_andcolum(int len);
 void use_fun();
 //字符串复制
 char *str_copy(char *str,char *arr);
-
+char * str_merge(char *str,char * merstr);
 void tree_trim(treenode *root);
 
 
