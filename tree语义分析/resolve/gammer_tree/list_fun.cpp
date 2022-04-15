@@ -129,18 +129,22 @@ char * str_copy(char *str,char *arr){
 }
 
 char * str_merge(char *str,char * merstr){
-    char * res = (char *)malloc(strlen(str)+1+strlen(merstr));
-    memset(res,0,strlen(str)+strlen(merstr));
+    merstr+='\0';
+    char * res = (char *)malloc(strlen(str)+strlen(merstr)+1);
+    memset(res,0,strlen(str)+strlen(merstr)+1);
     for(int i = 0;i < strlen(str);i++){
         res[i] = str[i];
     }
 
-    for(int i = 0;i < strlen(str);i++){
-        res[i] = merstr[i+strlen(str)];
+    for(int i = 0;i < strlen(merstr);i++){
+        int j = i;
+        char s =  merstr[i];
+        res[i+strlen(str)] = s;
     }
-    res+='\0';
-    if(str != NULL)
-    free(str);
+    char *p = str;
+    if(strlen(str)!=0){
+        free(p);
+    }
     return res;
 }
 

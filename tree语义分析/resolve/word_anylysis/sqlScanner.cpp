@@ -54,7 +54,8 @@
  * 254 and或or之间的词类似于age>40
  * 255 ()内有另外的select语句
  * 256 数据库查询的列号select age,name,id from中的age,name,id下面分支分出来分别是age name id
- * 257 ()内有列名
+ * 257 ()插入语句中的内有列名
+ * 258 ()插入语句中后面的value即类似于(ssss,15,28,72)
  * 1000 \0
  * */
 
@@ -808,14 +809,44 @@ list * branch_256(int arrlen,int num){
     }
     return res;
 }
-list * branch_257(int arrlen,int num){
-
-
-
-
-
+list * branch_257(int arrlen){
+    list *res = (list *)malloc(sizeof(list));
+   sqlitWord *p = word;
+   p = p+arrlen+1;
+    while (p->num != 41){
+        if(p->num == 44){
+            p+=1;
+            continue;
+        }
+       treenode *tree = (treenode *)malloc(sizeof(treenode));
+       memset(tree,0,sizeof(treenode));
+       tree->str = str_copy(tree->str,p->arr);
+       tree->strtype = p->num;
+       tree->strlen = strlen(tree->str);
+       add_list(res,tree);
+       p+=1;
+    }
+    return res;
 }
 
-
+list * branch_258(int arrlen){
+    list *res = (list *)malloc(sizeof(list));
+    sqlitWord *p = word;
+    p = p+arrlen+1;
+    while (p->num != 41){
+        if(p->num == 44){
+            p+=1;
+            continue;
+        }
+        treenode *tree = (treenode *)malloc(sizeof(treenode));
+        memset(tree,0,sizeof(treenode));
+        tree->str = str_copy(tree->str,p->arr);
+        tree->strtype = p->num;
+        tree->strlen = strlen(tree->str);
+        add_list(res,tree);
+        p+=1;
+    }
+    return res;
+}
 
 

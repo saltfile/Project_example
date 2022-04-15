@@ -11,7 +11,7 @@
 
 int main() {
 use_fun();
-char *sss = "insert into tname (id,name,age,sex) values";
+char *sss = "insert into tname (id,name,age,sex) values(num,asd,45,N)(num,asd,11,N)(num,asd,23,N)(num,asd,67,N)";
 char *str =   "select id,age,name from aaa where age > 2 and id = 12 or xxx = xs";
 sqlsacnner(str);
 get_wordlen();

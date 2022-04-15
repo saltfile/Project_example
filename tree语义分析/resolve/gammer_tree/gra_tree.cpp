@@ -145,8 +145,6 @@ void sql_ins(treenode *root){
     if(word.num == sql->strtype){
         sql->str = str_copy(sql->str,word.arr);
         sql->strlen = strlen(sql->str);
-        sel = sel->next;
-        sql = sel->tree;
         arrlen++;
     } else{
         log_erro("表名位置，缺少后续语句");
@@ -160,13 +158,15 @@ void sql_ins(treenode *root){
     }
     //列名字表
     word = get_word(arrlen);
-    char *str=NULL;
+    char *str="\0";
+    int col_list = arrlen;
     if(word.num == 40){
+
         arrlen++;
         while (true){
             if(wordlen <= arrlen){
                 //封装语法错误
-                log_erro("语句残缺");
+                log_erro("列表名，语句残缺");
                 return;
             }
             word = get_word(arrlen);
@@ -176,20 +176,31 @@ void sql_ins(treenode *root){
             str = str_merge(str,word.arr);
             arrlen++;
         }
+    } else{
+        log_erro("错误，语句不完整");
+        return;
     }
-
-
-
-
-
-
-
+    list *slist = branch_257(col_list);
+    treenode *colomn = (treenode *)malloc(sizeof(treenode));
+    memset(colomn,0,sizeof(treenode));
+    colomn->str = str;
+    colomn->strtype = 257;
+    colomn->strlen = strlen(colomn->str);
+    colomn->nodelist = slist;
+    add_list(sel,colomn);
+    sel = sel->next;
+    arrlen++;
 
     //values
     word = get_word(arrlen);
     if(word.num == 14){
+        treenode *valnode = (treenode *)malloc(sizeof(treenode));
+        memset(valnode,0,sizeof(treenode));
+        valnode->str = str_copy(valnode->str,word.arr);
+        valnode->strtype = 14;
+        valnode->strlen = strlen(valnode->str);
+        add_list(sel,valnode);
         sel = sel->next;
-        sql = sel->tree;
         arrlen++;
     }
     if(wordlen <= arrlen){
@@ -198,8 +209,48 @@ void sql_ins(treenode *root){
         return;
     }
 
-    //()括号内数据
 
+    //values后面的列表
+    word = get_word(arrlen);
+    while (true){
+
+        if(wordlen <= arrlen){
+            break;
+        }
+        word = get_word(arrlen);
+        int val_len;
+        char *val_str = "\0";
+        if (word.num == 40){
+            val_len = arrlen;
+            arrlen++;
+            while (true){
+                if(wordlen <= arrlen){
+                    //封装语法错误
+                    log_erro("列表名，语句残缺");
+                    return;
+                }
+                word = get_word(arrlen);
+                if(word.num == 41){
+                    break;
+                }
+                val_str = str_merge(val_str,word.arr);//前继
+                arrlen++;
+            }
+        } else{
+            log_erro("语法错误");
+            return;
+        }
+
+        treenode *val_list =  (treenode *)malloc(sizeof(treenode));
+        memset(val_list,0,sizeof(val_list));
+        val_list->str = str_copy(val_list->str,val_str);
+        val_list->strtype = 258;
+        val_list->strlen = strlen(val_list->str);
+        val_list->nodelist = branch_258(val_len);
+        add_list(sel,val_list);
+        arrlen++;
+        sel = sel->next;
+    }
 
     clear_cache();
 }

@@ -49,7 +49,6 @@ typedef struct treenode{
    char *str;
    int strlen = 0;
    int strtype = 0;
-   struct treenode *prev;//前继
    struct list *nodelist;//节点列表
 }treenode;
 //链表函数
@@ -84,8 +83,8 @@ void tree_trim(treenode *root);
 
 list * branch_245(int arrlen);
 list * branch_256(int arrlen,int num);
-
-
+list * branch_257(int arrlen);
+list * branch_258(int arrlen);
 
 
 
