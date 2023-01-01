@@ -1,1 +1,0 @@
-/usr/bin/c++  -g   CMakeFiles/ServerLab.dir/main.cpp.o CMakeFiles/ServerLab.dir/ser_lab/ser_one.cpp.o CMakeFiles/ServerLab.dir/lab_byte/fun_bytes.cpp.o CMakeFiles/ServerLab.dir/lab_crc/crc_lab.cpp.o  -o ServerLab 

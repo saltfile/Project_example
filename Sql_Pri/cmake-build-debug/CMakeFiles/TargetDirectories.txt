@@ -1,3 +1,0 @@
-/opt/Cpro/Sql_Pria/Sql_Pri/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/opt/Cpro/Sql_Pria/Sql_Pri/cmake-build-debug/CMakeFiles/edit_cache.dir
-/opt/Cpro/Sql_Pria/Sql_Pri/cmake-build-debug/CMakeFiles/Sql_Pri.dir
